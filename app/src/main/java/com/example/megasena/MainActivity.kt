@@ -29,8 +29,9 @@ class MainActivity : AppCompatActivity() {
         prefs = getSharedPreferences("db", Context.MODE_PRIVATE)
         val lastResult = prefs.getString("result", null)
 
-        if (lastResult != null) {
-            txtRegister.text = "Última aposta: $lastResult"
+
+        lastResult?.let{
+            txtRegister.text = getString(R.string.last_bet, lastResult.toString())
         }
 
         btnGenerate.setOnClickListener {
@@ -73,9 +74,10 @@ class MainActivity : AppCompatActivity() {
 
         txtResult.text = numbers.joinToString(" - ")
 
-        val editor = prefs.edit()
-        editor.putString("result", txtResult.text.toString())
-        editor.apply()
+       prefs.edit().apply() {
+           putString("result", txtResult.text.toString())
+           apply()
+       }
 
     }
 }
